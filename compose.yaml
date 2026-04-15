@@ -1,0 +1,166 @@
+services:
+  #----------------------------------------------------------------------------------------------------
+  # PostgreSQL — primary database
+  postgres:
+    image: postgres:16-alpine
+    container_name: webscraper-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  #----------------------------------------------------------------------------------------------------
+  # Redis -> Celery broker and result backend
+  redis:
+    image: redis:7-alpine
+    container_name: webscraper-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  #----------------------------------------------------------------------------------------------------
+  # Adminer -> web UI for PostgreSQL
+  # Access at -> http://localhost:8080
+  adminer:
+    image: adminer:latest
+    container_name: webscraper-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+
+  #----------------------------------------------------------------------------------------------------
+  # API -> FastAPI and frontend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webscraper-api
+    restart: unless-stopped
+    environment:
+      SERVICE_ROLE: api
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      API_HOST: ${API_HOST}
+      API_PORT: ${API_PORT}
+      API_LOG_LEVEL: ${API_LOG_LEVEL}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      SCRAPER_DEFAULT_TIMEOUT: ${SCRAPER_DEFAULT_TIMEOUT}
+      SCRAPER_MAX_RETRIES: ${SCRAPER_MAX_RETRIES}
+      SCRAPER_RETRY_DELAY: ${SCRAPER_RETRY_DELAY}
+      SCRAPER_USER_AGENT: ${SCRAPER_USER_AGENT}
+      SCRAPER_MAX_CONCURRENT_REQUESTS: ${SCRAPER_MAX_CONCURRENT_REQUESTS}
+      SCRAPER_RESPECT_ROBOTS_TXT: ${SCRAPER_RESPECT_ROBOTS_TXT}
+      SCRAPER_DEFAULT_DELAY_BETWEEN_REQUESTS: ${SCRAPER_DEFAULT_DELAY_BETWEEN_REQUESTS}
+      # Container names used by the restart endpoint to target the right containers.
+      # These must match the container_name values in this file.
+      CONTAINER_NAME_API: webscraper-api
+      CONTAINER_NAME_WORKER: webscraper-celery-worker
+      CONTAINER_NAME_BEAT: webscraper-celery-beat
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.config:/WebScraper/.config
+      - ./.env:/WebScraper/.env
+      - ./backend:/WebScraper/backend
+      - ./frontend:/WebScraper/frontend
+      - ./WebScraper.py:/WebScraper/WebScraper.py
+      # If you want to use docker socket, you can run docker without sudo (give yourself a docker group)
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+  #----------------------------------------------------------------------------------------------------
+  # Celery Worker -> executes scraping jobs
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webscraper-celery-worker
+    restart: unless-stopped
+    environment:
+      SERVICE_ROLE: celery-worker
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      CELERY_WORKER_CONCURRENCY: ${CELERY_WORKER_CONCURRENCY}
+      SCRAPER_DEFAULT_TIMEOUT: ${SCRAPER_DEFAULT_TIMEOUT}
+      SCRAPER_MAX_RETRIES: ${SCRAPER_MAX_RETRIES}
+      SCRAPER_RETRY_DELAY: ${SCRAPER_RETRY_DELAY}
+      SCRAPER_USER_AGENT: ${SCRAPER_USER_AGENT}
+      SCRAPER_MAX_CONCURRENT_REQUESTS: ${SCRAPER_MAX_CONCURRENT_REQUESTS}
+      SCRAPER_RESPECT_ROBOTS_TXT: ${SCRAPER_RESPECT_ROBOTS_TXT}
+      SCRAPER_DEFAULT_DELAY_BETWEEN_REQUESTS: ${SCRAPER_DEFAULT_DELAY_BETWEEN_REQUESTS}
+      TRANSFORMERS_CACHE: /model_cache
+    volumes:
+      - ./.config:/WebScraper/.config
+      - ./.env:/WebScraper/.env
+      - ./backend:/WebScraper/backend
+      - ./WebScraper.py:/WebScraper/WebScraper.py
+      - ./volumes/model_cache:/model_cache
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+  #----------------------------------------------------------------------------------------------------
+  # Celery Beat -> periodic task scheduler
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webscraper-celery-beat
+    restart: unless-stopped
+    environment:
+      SERVICE_ROLE: celery-beat
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+    depends_on:
+      redis:
+        condition: service_healthy

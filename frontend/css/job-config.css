@@ -1,0 +1,101 @@
+.job-config-form {
+    max-width: 720px;
+}
+
+.job-config-form .card {
+    margin-bottom: 20px;
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* URL Rules builder */
+.rules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.rule-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.rule-row .form-select {
+    max-width: 160px;
+}
+
+.rule-row .form-input {
+    flex: 1;
+}
+
+.rule-row .btn-icon {
+    flex-shrink: 0;
+    color: var(--accent-red);
+    background: transparent;
+    border: 1px solid var(--border-color);
+}
+
+.rule-row .btn-icon:hover {
+    background-color: rgba(255, 69, 58, 0.1);
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Data targets checkboxes */
+.targets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Mode selector cards */
+.mode-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.mode-option {
+    padding: 14px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--transition-fast);
+    background-color: var(--bg-tertiary);
+}
+
+.mode-option:hover {
+    border-color: var(--border-light);
+}
+
+.mode-option.selected {
+    border-color: var(--accent-blue);
+    background-color: rgba(79, 143, 247, 0.08);
+}
+
+.mode-option-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.mode-option-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Submit area */
+.form-submit {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}

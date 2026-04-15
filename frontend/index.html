@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebScraper</title>
+    <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/css/job-config.css">
+    <link rel="stylesheet" href="/static/css/analytics.css">
+    <link rel="stylesheet" href="/static/css/credentials.css">
+    <link rel="stylesheet" href="/static/css/categories.css">
+    <link rel="stylesheet" href="/static/css/settings.css">
+</head>
+<body>
+    <!-- ================================================================= -->
+    <!-- SIDEBAR NAVIGATION -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-logo">
+                <span class="logo-icon">&#9783;</span>
+                WebScraper
+            </h1>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>
+                <a href="#" class="nav-link active" data-view="dashboard">
+                    <span class="nav-icon">&#9632;</span>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link" data-view="job-config">
+                    <span class="nav-icon">&#9881;</span>
+                    New Job
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link" data-view="analytics">
+                    <span class="nav-icon">&#9636;</span>
+                    Analytics
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link" data-view="credentials">
+                    <span class="nav-icon">&#9919;</span>
+                    Credentials
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link" data-view="categories">
+                    <span class="nav-icon">&#9776;</span>
+                    Categories
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link" data-view="settings">
+                    <span class="nav-icon">&#9965;</span>
+                    Settings
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div id="health-status" class="health-indicator">
+                <span class="health-dot"></span>
+                <span class="health-text">Connecting...</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================================================================= -->
+    <!-- MAIN CONTENT AREA -->
+    <main id="main-content" class="main-content">
+
+        <!-- Dashboard View -->
+        <section id="view-dashboard" class="view active">
+            <div class="view-header">
+                <h2>Dashboard</h2>
+                <button id="btn-refresh-jobs" class="btn btn-secondary" title="Refresh">&#8635; Refresh</button>
+            </div>
+
+            <!-- Live Metrics Bar -->
+            <div id="metrics-bar" class="metrics-bar">
+                <div class="metric-card">
+                    <span class="metric-value" id="metric-total-jobs">0</span>
+                    <span class="metric-label">Total Jobs</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="metric-running">0</span>
+                    <span class="metric-label">Running</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="metric-pages">0</span>
+                    <span class="metric-label">Pages Scraped</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value" id="metric-errors">0</span>
+                    <span class="metric-label">Errors</span>
+                </div>
+            </div>
+
+            <!-- Jobs Table -->
+            <div class="table-container">
+                <table id="jobs-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>URL</th>
+                            <th>Mode</th>
+                            <th>Status</th>
+                            <th>Pages</th>
+                            <th>Speed</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobs-table-body">
+                        <tr>
+                            <td colspan="8" class="empty-state">No jobs yet.
+                                Create one to get started.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Log Stream Panel -->
+            <div id="log-panel" class="log-panel hidden">
+                <div class="log-panel-header">
+                    <h3>Live Logs: <span id="log-job-name"></span></h3>
+                    <button id="btn-close-logs" class="btn btn-small">&times;</button>
+                </div>
+                <div id="log-stream" class="log-stream"></div>
+            </div>
+        </section>
+
+        <!-- Job Configuration View -->
+        <section id="view-job-config" class="view">
+            <!-- Populated by job-config.js -->
+        </section>
+
+        <!-- Analytics View -->
+        <section id="view-analytics" class="view">
+            <!-- Populated by analytics.js -->
+        </section>
+
+        <!-- Credentials View -->
+        <section id="view-credentials" class="view">
+            <!-- Populated by credentials.js -->
+        </section>
+
+        <!-- Categories View -->
+        <section id="view-categories" class="view">
+            <!-- Populated by categories.js -->
+        </section>
+
+        <!-- Settings View -->
+        <section id="view-settings" class="view">
+            <!-- Populated by settings.js -->
+        </section>
+
+    </main>
+
+    <!-- ================================================================= -->
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ================================================================= -->
+    <!-- SCRIPTS -->
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/job-config.js"></script>
+    <script src="/static/js/analytics.js"></script>
+    <script src="/static/js/credentials.js"></script>
+    <script src="/static/js/categories.js"></script>
+    <script src="/static/js/settings.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

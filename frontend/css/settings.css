@@ -1,0 +1,230 @@
+/* --------------------------------------------------------------------------- */
+/* Restart banner — shown when .env changes require a container restart */
+.restart-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    background-color: rgba(255, 159, 10, 0.15);
+    border: 1px solid var(--accent-orange);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+}
+
+.restart-banner-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-orange);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.restart-banner-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.restart-banner-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Settings sections */
+.settings-section {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.settings-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.settings-section-header:hover {
+    background-color: var(--bg-hover);
+}
+
+.settings-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-section-title h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.settings-section-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-hot {
+    background-color: rgba(52, 199, 89, 0.2);
+    color: var(--accent-green);
+    border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+.badge-restart {
+    background-color: rgba(255, 159, 10, 0.2);
+    color: var(--accent-orange);
+    border: 1px solid rgba(255, 159, 10, 0.3);
+}
+
+.settings-section-chevron {
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: transform var(--transition-fast);
+}
+
+.settings-section.collapsed .settings-section-chevron {
+    transform: rotate(-90deg);
+}
+
+.settings-section-body {
+    padding: 20px;
+}
+
+.settings-section.collapsed .settings-section-body {
+    display: none;
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Settings rows */
+.settings-row {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.settings-row:first-child {
+    padding-top: 0;
+}
+
+.settings-label {
+    padding-top: 8px;
+}
+
+.settings-label-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-family: "Menlo", "Monaco", "Consolas", monospace;
+}
+
+.settings-label-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+.settings-input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.settings-input input[type="text"],
+.settings-input input[type="number"],
+.settings-input select,
+.settings-input textarea {
+    width: 100%;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 8px 10px;
+    font-family: inherit;
+    transition: border-color var(--transition-fast);
+}
+
+.settings-input input[type="text"]:focus,
+.settings-input input[type="number"]:focus,
+.settings-input select:focus,
+.settings-input textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.settings-input textarea {
+    resize: vertical;
+    min-height: 64px;
+    font-family: "Menlo", "Monaco", "Consolas", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.settings-input input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    accent-color: var(--accent-blue);
+}
+
+.settings-input-note {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------- */
+/* Actions bar */
+.settings-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 0;
+    margin-top: 4px;
+    border-top: 1px solid var(--border-color);
+}
+
+.settings-actions-right {
+    display: flex;
+    gap: 10px;
+}
+
+.settings-save-status {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-save-status.success {
+    color: var(--accent-green);
+}
+
+.settings-save-status.error {
+    color: var(--accent-red);
+}

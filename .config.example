@@ -1,0 +1,106 @@
+# =============================================================================
+# WebScraper — Application Configuration
+# Copy this file to .config and customize as needed.
+# =============================================================================
+
+[scraper]
+# Maximum pages to crawl in a single job (safety limit)
+max_pages_per_job = 10000
+
+# Maximum crawl depth for link-following modes
+max_crawl_depth = 50
+
+# Number of pages scraped concurrently within a single job.
+# Each slot is an asyncio coroutine making an independent HTTP request.
+# HTTP is I/O-bound so this gives true parallelism regardless of the GIL.
+# Raise to 20-50 on fast connections. Lower on slow/rate-limited sites.
+concurrent_pages_per_job = 10
+
+# Domains that should never be scraped
+blocked_domains = facebook.com, instagram.com, twitter.com, x.com, tiktok.com
+
+# File extensions to skip when discovering links
+skip_extensions = .pdf, .jpg, .jpeg, .png, .gif, .svg, .mp4, .mp3, .zip, .tar, .gz
+
+# JS detection score threshold. When js_mode=auto, pages scoring >= this
+# value are re-fetched with Playwright. Lower = more Playwright (more RAM).
+# Range: 2 (very aggressive) to 8 (conservative).
+# Default: 5 — only clear SPA signals trigger Playwright.
+# Set to 8 to effectively disable auto-detection (same as js_mode=never).
+js_detection_threshold = 5
+
+[extraction]
+# Minimum text density ratio (text characters / total tag characters)
+min_text_density = 0.25
+
+# Minimum word count for a block to qualify as main content
+min_block_words = 20
+
+# Tags always stripped from content
+strip_tags = nav, footer, header, aside, script, style, noscript, iframe
+
+# CSS classes/IDs commonly used for non-content elements
+strip_classes = sidebar, advertisement, ad-container, social-share, cookie-banner, popup
+
+[code_detection]
+# Minimum symbol density to trigger code block detection
+min_symbol_density = 0.08
+
+# Symbols that count toward code detection
+code_symbols = { } [ ] ; = => // /* */ ( ) < > :: -> | & % #
+
+[classification]
+# =============================================================================
+# AI Classification — controls automatic content categorization.
+#
+# provider options:
+#   none      — classification disabled (default)
+#   bart      — local facebook/bart-large-mnli model (CPU, ~1.6GB download)
+#   http_api  — external HTTP endpoint (Ollama, OpenAI-compatible, etc.)
+# =============================================================================
+provider = none
+
+# Minimum confidence score (0.0–1.0) to assign a label.
+confidence_threshold = 0.4
+
+# Words (title + body) sent to the classifier per page.
+max_words = 500
+
+# Candidate category labels for BART zero-shot classification.
+candidate_labels = Food,History,Sport,Technology,Space,Science,Politics,Business,Health,Entertainment,Travel,Nature,Art,Education,Music,Film,Literature,Religion,Philosophy,Gaming,News,Finance,Fashion,Automotive,Pets
+
+# ---------------------------------------------------------------------------
+# BART provider settings (used when provider = bart)
+# ---------------------------------------------------------------------------
+# bart_inference_workers = 1
+
+# Whether to run the classifier inside the thread workers or in the coordinator.
+# In both cases only ONE BART instance is loaded per Celery worker process
+# (a process-level singleton is shared across all threads).
+# true  = classification runs inside threads, parallel with HTTP fetching
+# false = classification runs sequentially in the coordinator after each fetch
+# RAM cost is ~1.6 GB either way. Default: true.
+run_in_subprocess = true
+
+# ---------------------------------------------------------------------------
+# HTTP API provider settings (used when provider = http_api)
+# ---------------------------------------------------------------------------
+# http_endpoint = http://host.docker.internal:11434/api/generate
+# http_model = llama3
+# http_api_format = ollama
+# http_timeout = 30
+# http_auth_header =
+
+[categories]
+# Default keyword lists for rule-based classification (legacy system)
+technology = software, programming, developer, API, cloud, AI, machine learning, startup, tech
+sports = football, basketball, soccer, tennis, athlete, tournament, championship, league, match
+science = research, study, experiment, physics, biology, chemistry, genome, climate, discovery
+business = market, stock, revenue, CEO, startup, merger, acquisition, finance, economy
+health = medical, doctor, hospital, disease, treatment, vaccine, mental health, wellness
+entertainment = movie, music, celebrity, concert, album, streaming, game, show, festival
+politics = election, president, congress, senate, legislation, policy, government, vote, campaign
+
+[logging]
+log_retention_days = 30
+max_log_entries_per_job = 50000

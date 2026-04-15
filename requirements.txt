@@ -1,0 +1,60 @@
+# PyTorch CPU-only wheel lives on a separate index.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Web Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.1
+psycopg2-binary==2.9.10
+
+# Task Queue
+celery[redis]==5.4.0
+redis==5.2.1
+
+# Async HTTP
+aiohttp==3.11.11
+
+# Browser Automation (JS rendering)
+playwright>=1.49.0
+aiofiles==24.1.0
+
+# HTML Parsing & Content Extraction
+beautifulsoup4==4.12.3
+lxml==5.3.0
+lxml_html_clean==0.4.1
+readability-lxml==0.8.1
+html5lib==1.1
+
+# Encryption
+cryptography==44.0.0
+
+# WebSocket Support
+websockets==14.1
+
+# Data Export
+python-multipart==0.0.20
+
+# Configuration
+python-dotenv==1.0.1
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# Logging
+structlog==24.4.0
+
+# AI Classification (local BART model)
+# Pinned forever — do not upgrade without updating the model revision in
+# bart_provider.py and re-testing classification quality.
+torch==2.5.1+cpu
+transformers==4.46.3
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.0
+httpx==0.28.1
+aiosqlite==0.20.0
+aioresponses==0.7.7

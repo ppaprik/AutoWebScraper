@@ -1,0 +1,62 @@
+/* --------------------------------------------------------------------------- */
+/* Job actions column */
+.job-actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: nowrap;
+}
+
+.job-actions .btn-small {
+    min-width: 28px;
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Clickable job row for log viewing */
+.data-table tbody tr.clickable {
+    cursor: pointer;
+}
+
+.data-table tbody tr.clickable:hover {
+    background-color: var(--bg-hover);
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Log panel auto-scroll indicator */
+.log-stream.auto-scroll {
+    scroll-behavior: smooth;
+}
+
+
+/* --------------------------------------------------------------------------- */
+/* Status filter bar */
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.filter-btn.active {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #ffffff;
+}
